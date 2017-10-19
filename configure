@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# cleanup build dir if exist
+rm -rf _build
+
+# create Unix Makefiles project
+mkdir _build && cd _build && cmake ..; cd ..
+
+echo "
+.PHONY: all clean_all packages
+
+all:
+	make -C _build all
+
+clean_all:
+	rm -rf Makefile
+	rm -rf _build
+
+indent:
+	find . -name *.h -o -name *.c -o -name *.cpp -exec clang-format -i {} \;
+
+%:
+	make -C _build $@
+" > Makefile
+
+echo "You can now run \"make\""
