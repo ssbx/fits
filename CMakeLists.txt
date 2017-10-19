@@ -4,7 +4,9 @@ project(fits)
 enable_language(C)
 add_subdirectory(code)
 
-set (FITS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/code CACHE STRING "fits includes")
+
+add_executable(test_fits test_fits.c)
+target_link_libraries(test_fits fits)
 
 find_package (Doxygen)
 if (DOXYGEN_FOUND)
