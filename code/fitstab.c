@@ -734,7 +734,7 @@ int tab_row_len(char *file, char *tabname)
             free_tab(tab);
         }
         close_cat(tcat);
-        free_cat(&tcat,1);
+        free_cats(&tcat,1);
     }
     return retcode;
 }

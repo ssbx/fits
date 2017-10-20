@@ -19,6 +19,9 @@ clean_all:
 indent:
 	find . -name *.h -o -name *.c -o -name *.cpp -exec clang-format -i {} \;
 
+test: all
+	./_build/test_fits support/material/catalog.fits
+
 %:
 	make -C _build \$@
 " > Makefile

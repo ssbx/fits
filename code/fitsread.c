@@ -1,9 +1,4 @@
-/*
- *        fitsread.c
- *
- * Low-level functions for reading LDAC FITS catalogs.
- *
- *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  *
  *  This file part of:  AstrOmatic FITS/LDAC library
  *
@@ -27,6 +22,11 @@
  *
  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
+/**
+ * @file fitsread.c
+ * @brief Low-level functions for reading LDAC FITS catalogs.
+ */
+
 #ifdef  HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -39,17 +39,14 @@
 
 char  padbuf[FBSIZE];
 
-/****** read_cat ***************************************************************
-  PROTO  catstruct read_cat(char *filename)
-  PURPOSE  ``Read'' a FITS catalog with name filename.
-  INPUT  Filename,
-  OUTPUT  catstruct pointer.
-  NOTES  Returns NULL if no file with name \<filename\> is found.
-  AUTHOR  E. Bertin (IAP & Leiden observatory)
-  VERSION  07/05/2002
- ***/
-catstruct  *read_cat(char *filename)
-
+/**
+ * @brief ``Read'' a FITS catalog with name filename.
+ * @param filemane The filename we want to read
+ * @return pointer to catstruct or NULL if no file with name \<filename\> is found.
+ * @author  E. Bertin (IAP & Leiden observatory)
+ * @date 07/05/2002
+ */
+catstruct *read_cat(char *filename)
 {
     catstruct *cat;
 
@@ -59,35 +56,32 @@ catstruct  *read_cat(char *filename)
     strcpy(cat->filename, filename);
     if (open_cat(cat, READ_ONLY) != RETURN_OK)
     {
-        free_cat(&cat, 1);
+        free_cats(&cat, 1);
         return NULL;
     }
 
     if (map_cat(cat) != RETURN_OK)
     {
-        free_cat(&cat, 1);
+        free_cats(&cat, 1);
         return NULL;
     }
 
     return cat;
 }
 
-
-/****** read_cats **************************************************************
-  PROTO  read_cats(char **filenames, int ncat)
-  PURPOSE  ``Read'' several FITS catalogs.
-  INPUT  A pointer to pointers of char,
-  The number of catalogs.
-  OUTPUT  catstruct pointer.
-  NOTES  -.
-  AUTHOR  E. Bertin (IAP & Leiden observatory)
-  VERSION  25/04/97
- ***/
+/**
+ * @brief ``Read'' several FITS catalogs.
+ * @param filenames A pointer to pointers of char,
+ * @param ncat The number of catalogs.
+ * @return a catstruct pointer array
+ * @author  E. Bertin (IAP & Leiden observatory)
+ * @date  25/04/97
+ * @see read_cat(filename)
+ */
 catstruct  *read_cats(char **filenames, int ncat)
-
 {
-    catstruct  *cat, *ccat;
-    int    i;
+    catstruct *cat, *ccat;
+    int i;
 
     if (!(cat = new_cat(ncat)))
         error (EXIT_FAILURE, "Not enough memory to read ", "catalogs");

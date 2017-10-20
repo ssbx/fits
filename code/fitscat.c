@@ -165,9 +165,23 @@ int    close_cat(catstruct *cat)
     return RETURN_OK;
 }
 
+/**
+ * @brief Free all structures allocated for a fits catalog
+ * @param cat a pointer to a catstruct
+ */
+void free_cat(catstruct *cat) {
 
-/****** free_cat ***************************************************************
-  PROTO    void free_cat(catstruct **cat, int ncat)
+    if (cat->file)
+        close_cat(cat);
+    remove_tabs(cat);
+    free(cat);
+
+    return;
+}
+
+
+/****** free_cats ***************************************************************
+  PROTO    void free_cats(catstruct **cat, int ncat)
   PURPOSE    Free all structures allocated for one or several FITS catalog.
   INPUT    Pointer to a catalog structure,
   Number of catalogs.
@@ -176,23 +190,12 @@ int    close_cat(catstruct *cat)
   AUTHOR    E. Bertin (IAP & Leiden observatory)
   VERSION    05/12/2009
  ***/
-void    free_cat(catstruct **cat, int ncat)
-
+void free_cats(catstruct **cat, int ncat)
 {
-    catstruct    **thecat;
     int        i;
-
-    /*--free memory allocated within each catalog */
-    thecat = cat;
-    for (i=ncat; i--;)
-    {
-        if ((*thecat)->file)
-            close_cat(*thecat);
-        remove_tabs(*thecat);
-        free(*(thecat++));
+    for (i=0; i<ncat; i++) {
+        free_cat(cat[i]);
     }
-
-
     return;
 }
 

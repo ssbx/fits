@@ -1,3 +1,12 @@
+/**
+ * @mainpage
+ * Most of the FITS documentation is included in the fits.h file.
+ */
+
+/**
+ * @file fits.h
+ * @brief Fits API
+ */
 #ifndef FITS_H
 #define FITS_H
 
@@ -5,13 +14,30 @@
 #include "fitscat_defs.h"
 
 /**
- * Fits lib high level API here
+ * @see fitsread.c
+ */
+catstruct *new_cat(int ncat);
+
+/**
+ * @see fitsread.c
  */
 
 
-extern catstruct *new_cat(int ncat);
-extern catstruct *read_cat(char *filename);
-extern catstruct *read_cats(char **filenames, int ncat);
+/**
+ * @see fitsread.c
+ */
+catstruct *read_cat(char *filename);
+
+/**
+ * @see fitsread.c
+ */
+catstruct *read_cats(char **filenames, int ncat);
+
+/**
+ * @see fitscat.c
+ */
+int	about_cat(catstruct *cat, FILE *stream);
+
 
 extern tabstruct	*asc2bin_tab(catstruct *catin, char *tabinname, 
         catstruct *catout, char *taboutname),
@@ -35,7 +61,8 @@ extern void	add_cleanupfilename(char *filename),
        error_installfunc(void (*func)(char *msg1, char *msg2)),
        fixexponent(char *s),
        free_body(tabstruct *tab),
-       free_cat(catstruct **cat, int ncat),
+       free_cat(catstruct *cat),
+       free_cats(catstruct **cat, int ncat),
        free_key(keystruct *key),
        free_tab(tabstruct *tab),
        init_writeobj(catstruct *cat, tabstruct *tab, char **pbuf),
@@ -75,8 +102,7 @@ compute_blocksum(char *buf, unsigned int sum),
     compute_bodysum(tabstruct *tab, unsigned int sum),
     decode_checksum(char *str);
 
-extern int	about_cat(catstruct *cat, FILE *stream),
-       about_tab(catstruct *cat, char *tabname, FILE *stream),
+extern int about_tab(catstruct *cat, char *tabname, FILE *stream),
        addhistoryto_cat(catstruct *cat, char *str),
        add_key(keystruct *key, tabstruct *tab, int pos),
        addkeyto_head(tabstruct *tab, keystruct *key),

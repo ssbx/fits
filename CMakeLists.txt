@@ -4,7 +4,7 @@ project(fits)
 enable_language(C)
 add_subdirectory(code)
 
-
+include_directories(code)
 add_executable(test_fits test_fits.c)
 target_link_libraries(test_fits fits)
 
