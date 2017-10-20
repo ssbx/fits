@@ -15,5 +15,6 @@ add_library(fits
         fitswrite.c)
 
 set (FITS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "fits includes")
+set (FITS_LIBRARIES fits CACHE STRING "fits lib")
 
 target_link_libraries(fits -lm)

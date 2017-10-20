@@ -35,8 +35,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 extern	char	histokeys[][12];
 const int	t_size[] = {1, 2, 4, 8, 4, 8, 1};/* size in bytes per t_type */

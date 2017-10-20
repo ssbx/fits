@@ -1,61 +1,61 @@
 /*
- *				fitscat.c
+ *                fitscat.c
  *
  * Low-level functions for handling FITS images and tables.
  *
  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  *
- *	This file part of:	AstrOmatic FITS/LDAC library
+ *    This file part of:    AstrOmatic FITS/LDAC library
  *
- *	Copyright:		(C) 1995-2012 Emmanuel Bertin -- IAP/CNRS/UPMC
+ *    Copyright:        (C) 1995-2012 Emmanuel Bertin -- IAP/CNRS/UPMC
  *
- *	License:		GNU General Public License
+ *    License:        GNU General Public License
  *
- *	AstrOmatic software is free software: you can redistribute it and/or
- *	modify it under the terms of the GNU General Public License as
- *	published by the Free Software Foundation, either version 3 of the
- *	License, or (at your option) any later version.
- *	AstrOmatic software is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *	You should have received a copy of the GNU General Public License
- *	along with AstrOmatic software.
- *	If not, see <http://www.gnu.org/licenses/>.
+ *    AstrOmatic software is free software: you can redistribute it and/or
+ *    modify it under the terms of the GNU General Public License as
+ *    published by the Free Software Foundation, either version 3 of the
+ *    License, or (at your option) any later version.
+ *    AstrOmatic software is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *    You should have received a copy of the GNU General Public License
+ *    along with AstrOmatic software.
+ *    If not, see <http://www.gnu.org/licenses/>.
  *
- *	Last modified:		29/08/2012
+ *    Last modified:        29/08/2012
  *
  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 #ifdef HAVE_CONFIG_H
-#include	"config.h"
+#include    "config.h"
 #endif
 
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<string.h>
-#include	<sys/types.h>
-#include	<sys/stat.h>
-#include	<fcntl.h>
-#include	<time.h>
+#include    <stdio.h>
+#include    <stdlib.h>
+#include    <string.h>
+#include    <sys/types.h>
+#include    <sys/stat.h>
+#include    <fcntl.h>
+#include    <time.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include    "fitscat_defs.h"
+#include    "fitscat.h"
 
 /****** about_cat **************************************************************
-  PROTO	int about_cat(catstruct *cat, FILE *stream)
-  PURPOSE	Print some info about a catalog.
-  INPUT	Catalog structure,
+  PROTO    int about_cat(catstruct *cat, FILE *stream)
+  PURPOSE    Print some info about a catalog.
+  INPUT    Catalog structure,
   output stream.
-  OUTPUT	RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	19/03/2002
+  OUTPUT    RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    19/03/2002
  ***/
-int	about_cat(catstruct *cat, FILE *stream)
+int    about_cat(catstruct *cat, FILE *stream)
 
 {
-    tabstruct	*tab;
-    int		i;
+    tabstruct    *tab;
+    int        i;
 
     fprintf(stream,"\n");
 
@@ -73,23 +73,23 @@ int	about_cat(catstruct *cat, FILE *stream)
     for (i=0; i<cat->ntab; i++)
     {
         fprintf(stream,
-                "******	Table #%d\n", i+1);
+                "******    Table #%d\n", i+1);
         fprintf(stream,
-                "	Extension type:.........%s\n",
+                "    Extension type:.........%s\n",
                 tab->xtension[0]? tab->xtension: "(Primary HDU)");
         fprintf(stream,
-                "	Extension name:.........%s\n", tab->extname);
+                "    Extension name:.........%s\n", tab->extname);
         if (tab->naxis)
         {
             fprintf(stream,
-                    "	Number of dimensions:...%d\n", tab->naxis);
+                    "    Number of dimensions:...%d\n", tab->naxis);
             fprintf(stream,
-                    "	Number of elements:.....%d\n", tab->naxisn[1]);
+                    "    Number of elements:.....%d\n", tab->naxisn[1]);
             if (tab->tfields)
                 fprintf(stream,
-                        "	Number of data fields...%d\n", tab->tfields);
+                        "    Number of data fields...%d\n", tab->tfields);
             fprintf(stream,
-                    "	Body size:..............%ld bytes\n",
+                    "    Body size:..............%ld bytes\n",
                     (unsigned long)tab->tabsize);
         }
         fprintf(stream,"\n");
@@ -103,21 +103,21 @@ int	about_cat(catstruct *cat, FILE *stream)
 
 
 /****** addhistoryto_cat *******************************************************
-  PROTO	int addhistoryto_cat(catstruct *cat, char *str)
-  PURPOSE	Add a HISTORY line to a FITS catalog.
-  INPUT	A pointer to catalog structure, and the character string to insert.
-  OUTPUT	RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
-  NOTES	The pointer to the primary header might be reallocated if necessary.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	25/09/2004
+  PROTO    int addhistoryto_cat(catstruct *cat, char *str)
+  PURPOSE    Add a HISTORY line to a FITS catalog.
+  INPUT    A pointer to catalog structure, and the character string to insert.
+  OUTPUT    RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
+  NOTES    The pointer to the primary header might be reallocated if necessary.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    25/09/2004
  ***/
-int	addhistoryto_cat(catstruct *cat, char *str)
+int    addhistoryto_cat(catstruct *cat, char *str)
 
 {
-    time_t		thetime;
-    char			str2[82];
-    tabstruct		*tab;
-    int			n, headpos;
+    time_t        thetime;
+    char            str2[82];
+    tabstruct        *tab;
+    int            n, headpos;
 
     tab = cat->tab;
     n = tab->headnblock;
@@ -143,15 +143,15 @@ int	addhistoryto_cat(catstruct *cat, char *str)
 
 
 /****** close_cat **************************************************************
-  PROTO	int close_cat(catstruct *cat)
-  PURPOSE	Close a FITS catalog.
-  INPUT	catalog structure.
-  OUTPUT	RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
-  NOTES	the file structure member is set to NULL;
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	22/06/2001
+  PROTO    int close_cat(catstruct *cat)
+  PURPOSE    Close a FITS catalog.
+  INPUT    catalog structure.
+  OUTPUT    RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
+  NOTES    the file structure member is set to NULL;
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    22/06/2001
  ***/
-int	close_cat(catstruct *cat)
+int    close_cat(catstruct *cat)
 
 {
     if (cat->file && fclose(cat->file))
@@ -167,20 +167,20 @@ int	close_cat(catstruct *cat)
 
 
 /****** free_cat ***************************************************************
-  PROTO	void free_cat(catstruct **cat, int ncat)
-  PURPOSE	Free all structures allocated for one or several FITS catalog.
-  INPUT	Pointer to a catalog structure,
+  PROTO    void free_cat(catstruct **cat, int ncat)
+  PURPOSE    Free all structures allocated for one or several FITS catalog.
+  INPUT    Pointer to a catalog structure,
   Number of catalogs.
-  OUTPUT	-.
-  NOTES	Unallocated pointers should have been put to NULL.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	05/12/2009
+  OUTPUT    -.
+  NOTES    Unallocated pointers should have been put to NULL.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    05/12/2009
  ***/
-void	free_cat(catstruct **cat, int ncat)
+void    free_cat(catstruct **cat, int ncat)
 
 {
-    catstruct	**thecat;
-    int		i;
+    catstruct    **thecat;
+    int        i;
 
     /*--free memory allocated within each catalog */
     thecat = cat;
@@ -198,21 +198,21 @@ void	free_cat(catstruct **cat, int ncat)
 
 
 /****** inherit_cat ************************************************************
-  PROTO	int inherit_cat(catstruct *catin, catstruct *catout)
-  PURPOSE	Copy the primary table, and all other informations from one catalog
+  PROTO    int inherit_cat(catstruct *catin, catstruct *catout)
+  PURPOSE    Copy the primary table, and all other informations from one catalog
   to another, except those related to the associated file itself
   (filename, etc...),
-  INPUT	A pointer to both catalog structures.
-  OUTPUT	RETURN_OK if at least one table was copied, RETURN_ERROR otherwise.
-  NOTES	The output catalog should be ``cleaned'' before call.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	13/06/2002
+  INPUT    A pointer to both catalog structures.
+  OUTPUT    RETURN_OK if at least one table was copied, RETURN_ERROR otherwise.
+  NOTES    The output catalog should be ``cleaned'' before call.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    13/06/2002
  ***/
-int	inherit_cat(catstruct *catin, catstruct *catout)
+int    inherit_cat(catstruct *catin, catstruct *catout)
 
 {
-    tabstruct	*tabin, *tabout, *prevtabout;
-    int		j;
+    tabstruct    *tabin, *tabout, *prevtabout;
+    int        j;
 
     catout->ntab = 1;
     tabin = catin->tab;
@@ -255,27 +255,27 @@ int	inherit_cat(catstruct *catin, catstruct *catout)
 }
 
 /****** init_cat ***************************************************************
-  PROTO	int init_cat(catstruct *cat)
-  PURPOSE	Initialize a catalog, "cleaning" any content if present
+  PROTO    int init_cat(catstruct *cat)
+  PURPOSE    Initialize a catalog, "cleaning" any content if present
   and adding the primary header "table".
-  INPUT	A pointer to the catalog structure.
-  OUTPUT	RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
-  NOTES	The output catalog should be ``cleaned'' before call.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	28/05/2001
+  INPUT    A pointer to the catalog structure.
+  OUTPUT    RETURN_OK if everything went as expected, RETURN_ERROR otherwise.
+  NOTES    The output catalog should be ``cleaned'' before call.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    28/05/2001
  ***/
-int	init_cat(catstruct *cat)
+int    init_cat(catstruct *cat)
 
 {
-    static char	bintabtemplate[][80] = {
+    static char    bintabtemplate[][80] = {
         "SIMPLE  =                    T / This is a FITS file",
         "BITPIX  =                    8 / ",
         "NAXIS   =                    0 / ",
         "EXTEND  =                    T / This file may contain FITS extensions",
         "END                            "};
-    tabstruct	*tab;
-    char		*buf;
-    int		i;
+    tabstruct    *tab;
+    char        *buf;
+    int        i;
 
     /* Initialize the primary header itself */
     QCALLOC(tab, tabstruct, 1);
@@ -303,20 +303,20 @@ int	init_cat(catstruct *cat)
 
 
 /****** map_cat ****************************************************************
-  PROTO	int map_cat(catstruct *cat)
-  PURPOSE	Explores the whole FITS file
+  PROTO    int map_cat(catstruct *cat)
+  PURPOSE    Explores the whole FITS file
   and gets information for each of the FITS tables it contains.
-  INPUT	catalog structure.
-  OUTPUT	RETURN_OK if at least one table was found, RETURN_ERROR otherwise.
-  NOTES	Memory space for the array of fits structures is reallocated.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	14/12/2002
+  INPUT    catalog structure.
+  OUTPUT    RETURN_OK if at least one table was found, RETURN_ERROR otherwise.
+  NOTES    Memory space for the array of fits structures is reallocated.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    14/12/2002
  ***/
-int	map_cat(catstruct *cat)
+int    map_cat(catstruct *cat)
 
 {
-    int			ntab;
-    tabstruct		*tab, *prevtab;
+    int            ntab;
+    tabstruct        *tab, *prevtab;
 
     /*scan through the file until we reach the end*/
     prevtab = NULL;
@@ -357,25 +357,25 @@ int	map_cat(catstruct *cat)
     /*rewind to the beginning*/
     /*
        QFSEEK(cat->file, 0, SEEK_SET, cat->filename);
-     */
+       */
 
     return RETURN_OK;
 }
 
 
 /****** new_cat ****************************************************************
-  PROTO	catstruct *new_cat(int ncat)
-  PURPOSE	Initialize a structure for a FITS catalog.
-  INPUT	Number of catalogs.
-  OUTPUT	A pointer to the catalog array.
-  NOTES	All fields are initialized to 0.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	20/03/96
+  PROTO    catstruct *new_cat(int ncat)
+  PURPOSE    Initialize a structure for a FITS catalog.
+  INPUT    Number of catalogs.
+  OUTPUT    A pointer to the catalog array.
+  NOTES    All fields are initialized to 0.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    20/03/96
  ***/
-catstruct	*new_cat(int ncat)
+catstruct    *new_cat(int ncat)
 
 {
-    catstruct	*cat;
+    catstruct    *cat;
 
     QCALLOC(cat, catstruct, ncat);
 
@@ -386,16 +386,16 @@ catstruct	*new_cat(int ncat)
 
 
 /****** open_cat ***************************************************************
-  PROTO	int open_cat(catstruct *cat, access_type_t at)
-  PURPOSE	Open a FITS catalog with name filename.
-  INPUT	catalog structure,
+  PROTO    int open_cat(catstruct *cat, access_type_t at)
+  PURPOSE    Open a FITS catalog with name filename.
+  INPUT    catalog structure,
   access type (can be WRITE_ONLY or READ_ONLY).
-  OUTPUT	RETURN_OK if the cat is found, RETURN_ERROR otherwise.
-  NOTES	If the file was already opened by this catalog, nothing is done.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	29/08/2012
+  OUTPUT    RETURN_OK if the cat is found, RETURN_ERROR otherwise.
+  NOTES    If the file was already opened by this catalog, nothing is done.
+  AUTHOR    E. Bertin (IAP & Leiden observatory)
+  VERSION    29/08/2012
  ***/
-int	open_cat(catstruct *cat, access_type_t at)
+int    open_cat(catstruct *cat, access_type_t at)
 
 {
 

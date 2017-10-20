@@ -35,8 +35,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 char	histokeys[][12] = {"COMMENT ", "HISTORY ", "        ", ""};
 

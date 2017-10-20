@@ -34,8 +34,7 @@
 #include    <sys/types.h>
 #include    <sys/mman.h>
 
-#include    "fitscat_defs.h"
-#include    "fitscat.h"
+#include    "fits.h"
 
 size_t    body_maxram = BODY_DEFRAM,
           body_maxvram = BODY_DEFVRAM,

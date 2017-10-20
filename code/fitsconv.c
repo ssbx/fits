@@ -35,8 +35,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 /****** asc2bin_tab ***********************************************************
   PROTO	tabstruct *asc2bin_tab(catstruct *catin, char *tabinname, 

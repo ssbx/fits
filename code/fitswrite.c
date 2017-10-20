@@ -36,8 +36,7 @@
 #include	<string.h>
 #include	<time.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 
 /****** save_cat **************************************************************

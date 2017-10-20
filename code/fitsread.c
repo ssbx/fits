@@ -1,55 +1,54 @@
 /*
- *				fitsread.c
+ *        fitsread.c
  *
  * Low-level functions for reading LDAC FITS catalogs.
  *
  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  *
- *	This file part of:	AstrOmatic FITS/LDAC library
+ *  This file part of:  AstrOmatic FITS/LDAC library
  *
- *	Copyright:		(C) 1995-2010 Emmanuel Bertin -- IAP/CNRS/UPMC
+ *  Copyright:    (C) 1995-2010 Emmanuel Bertin -- IAP/CNRS/UPMC
  *
- *	License:		GNU General Public License
+ *  License:    GNU General Public License
  *
- *	AstrOmatic software is free software: you can redistribute it and/or
- *	modify it under the terms of the GNU General Public License as
- *	published by the Free Software Foundation, either version 3 of the
- *	License, or (at your option) any later version.
- *	AstrOmatic software is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *	You should have received a copy of the GNU General Public License
- *	along with AstrOmatic software.
- *	If not, see <http://www.gnu.org/licenses/>.
+ *  AstrOmatic software is free software: you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  AstrOmatic software is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  You should have received a copy of the GNU General Public License
+ *  along with AstrOmatic software.
+ *  If not, see <http://www.gnu.org/licenses/>.
  *
- *	Last modified:		09/10/2010
+ *  Last modified:    09/10/2010
  *
  *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#ifdef	HAVE_CONFIG_H
+#ifdef  HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<string.h>
+#include  <stdio.h>
+#include  <stdlib.h>
+#include  <string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include  "fits.h"
 
-char	padbuf[FBSIZE];
+char  padbuf[FBSIZE];
 
 /****** read_cat ***************************************************************
-  PROTO	catstruct read_cat(char *filename)
-  PURPOSE	``Read'' a FITS catalog with name filename.
-  INPUT	Filename,
-  OUTPUT	catstruct pointer.
-  NOTES	Returns NULL if no file with name \<filename\> is found.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	07/05/2002
+  PROTO  catstruct read_cat(char *filename)
+  PURPOSE  ``Read'' a FITS catalog with name filename.
+  INPUT  Filename,
+  OUTPUT  catstruct pointer.
+  NOTES  Returns NULL if no file with name \<filename\> is found.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  07/05/2002
  ***/
-catstruct	*read_cat(char *filename)
+catstruct  *read_cat(char *filename)
 
 {
     catstruct *cat;
@@ -75,20 +74,20 @@ catstruct	*read_cat(char *filename)
 
 
 /****** read_cats **************************************************************
-  PROTO	read_cats(char **filenames, int ncat)
-  PURPOSE	``Read'' several FITS catalogs.
-  INPUT	A pointer to pointers of char,
+  PROTO  read_cats(char **filenames, int ncat)
+  PURPOSE  ``Read'' several FITS catalogs.
+  INPUT  A pointer to pointers of char,
   The number of catalogs.
-  OUTPUT	catstruct pointer.
-  NOTES	-.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	25/04/97
+  OUTPUT  catstruct pointer.
+  NOTES  -.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  25/04/97
  ***/
-catstruct	*read_cats(char **filenames, int ncat)
+catstruct  *read_cats(char **filenames, int ncat)
 
 {
-    catstruct	*cat, *ccat;
-    int		i;
+    catstruct  *cat, *ccat;
+    int    i;
 
     if (!(cat = new_cat(ncat)))
         error (EXIT_FAILURE, "Not enough memory to read ", "catalogs");
@@ -108,22 +107,22 @@ catstruct	*read_cats(char **filenames, int ncat)
 
 
 /****** init_readobj **********************************************************
-  PROTO	tabstruct *init_readobj(tabstruct *tab, char **pbuf)
-  PURPOSE	Prepare the reading of individual sources in a FITS table
-  INPUT	Table structure,
+  PROTO  tabstruct *init_readobj(tabstruct *tab, char **pbuf)
+  PURPOSE  Prepare the reading of individual sources in a FITS table
+  INPUT  Table structure,
   pointer to an array pointer to be used as a temporary buffer.
-  OUTPUT	Pointer to the table structure from which the data will be read.
-  NOTES	-.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	26/09/2004
+  OUTPUT  Pointer to the table structure from which the data will be read.
+  NOTES  -.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  26/09/2004
  ***/
-tabstruct	*init_readobj(tabstruct *tab, char **pbuf)
+tabstruct  *init_readobj(tabstruct *tab, char **pbuf)
 
 {
-    catstruct	*tabcat;
-    tabstruct	*keytab;
-    keystruct	*key;
-    int		k;
+    catstruct  *tabcat;
+    tabstruct  *keytab;
+    keystruct  *key;
+    int    k;
 
     /* Scan keys to find the reference tab and other things*/
     keytab = NULL;
@@ -155,23 +154,23 @@ tabstruct	*init_readobj(tabstruct *tab, char **pbuf)
 
 
 /****** read_obj **************************************************************
-  PROTO	int read_obj(tabstruct *keytab, tabstruct *tab, char *buf)
-  PURPOSE	Read one individual source at the current position in a FITS table.
-  INPUT	Table which will be accessed from disk (provided by init_readobj()),
+  PROTO  int read_obj(tabstruct *keytab, tabstruct *tab, char *buf)
+  PURPOSE  Read one individual source at the current position in a FITS table.
+  INPUT  Table which will be accessed from disk (provided by init_readobj()),
   table containing the keys that will be read,
   pointer to the temporary buffer.
-  OUTPUT	The number of table lines that remain to be read.
-  NOTES	-.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	26/09/2004
+  OUTPUT  The number of table lines that remain to be read.
+  NOTES  -.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  26/09/2004
  ***/
-int	read_obj(tabstruct *keytab, tabstruct *tab, char *buf)
+int  read_obj(tabstruct *keytab, tabstruct *tab, char *buf)
 
 {
-    keystruct	*key;
-    char		*pin, *pout;
-    int		b,k;
-    int		esize;
+    keystruct  *key;
+    char    *pin, *pout;
+    int    b,k;
+    int    esize;
 
     QFREAD(buf,keytab->naxisn[0],keytab->cat->file,keytab->cat->filename);
     key = tab->key;
@@ -194,25 +193,25 @@ int	read_obj(tabstruct *keytab, tabstruct *tab, char *buf)
 
 
 /****** read_obj_at ***********************************************************
-  PROTO	int read_obj_at(tabstruct *keytab, tabstruct *tab, char *buf, long pos)
+  PROTO  int read_obj_at(tabstruct *keytab, tabstruct *tab, char *buf, long pos)
   PURPOSE Get one source at a specific position in a FITS table.
-  INPUT	Table which will be accessed from disk (provided by init_readobj()),
+  INPUT  Table which will be accessed from disk (provided by init_readobj()),
   table containing the keys that will be read.
   pointer to the temporary buffer,
   position number in table.
-  OUTPUT	RETURN_OK if the object has been accessed, RETURN_ERROR otherwise.
-  NOTES	-.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	26/09/2004
+  OUTPUT  RETURN_OK if the object has been accessed, RETURN_ERROR otherwise.
+  NOTES  -.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  26/09/2004
  ***/
-int	read_obj_at(tabstruct *keytab, tabstruct *tab, char *buf, long pos)
+int  read_obj_at(tabstruct *keytab, tabstruct *tab, char *buf, long pos)
 
 {
-    keystruct	*key;
-    char		*pin, *pout;
-    size_t	n;
-    int		b,k;
-    int		esize;
+    keystruct  *key;
+    char    *pin, *pout;
+    size_t  n;
+    int    b,k;
+    int    esize;
 
     if ((n=keytab->naxisn[0]*pos) >= keytab->tabsize)
         return RETURN_ERROR;
@@ -238,17 +237,17 @@ int	read_obj_at(tabstruct *keytab, tabstruct *tab, char *buf, long pos)
 
 
 /****** end_readobj **********************************************************
-  PROTO	void end_readobj(tabstruct *keytab, tabstruct *tab, char *buf)
-  PURPOSE	End the writing of individual sources in a FITS table
-  INPUT	Table which will be accessed from disk (provided by init_readobj()),
+  PROTO  void end_readobj(tabstruct *keytab, tabstruct *tab, char *buf)
+  PURPOSE  End the writing of individual sources in a FITS table
+  INPUT  Table which will be accessed from disk (provided by init_readobj()),
   table containing the keys that have been read,
   pointer to the temporary buffer.
-  OUTPUT	-.
-  NOTES	-.
-  AUTHOR	E. Bertin (IAP & Leiden observatory)
-  VERSION	26/09/2004
+  OUTPUT  -.
+  NOTES  -.
+  AUTHOR  E. Bertin (IAP & Leiden observatory)
+  VERSION  26/09/2004
  ***/
-void	end_readobj(tabstruct *keytab, tabstruct *tab, char *buf)
+void  end_readobj(tabstruct *keytab, tabstruct *tab, char *buf)
 
 {
 

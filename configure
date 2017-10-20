@@ -20,7 +20,7 @@ indent:
 	find . -name *.h -o -name *.c -o -name *.cpp -exec clang-format -i {} \;
 
 %:
-	make -C _build $@
+	make -C _build \$@
 " > Makefile
 
 echo "You can now run \"make\""

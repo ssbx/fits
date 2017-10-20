@@ -35,8 +35,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 /****** add_key ****************************************************************
   PROTO	int add_key(keystruct *key, tabstruct *tab, int pos)

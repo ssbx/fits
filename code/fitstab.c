@@ -35,8 +35,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"fitscat_defs.h"
-#include	"fitscat.h"
+#include	"fits.h"
 
 /****** about_tab **************************************************************
   PROTO	int about_tab(catstruct *cat, char *tabname, FILE *stream)
